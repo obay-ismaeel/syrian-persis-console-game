@@ -12,8 +12,6 @@ class Pawn
         this.Player = player;
     }
 
-    public int StartIndex() => this.Player == Player.USER ? 0 : 42;
-
     public override string ToString()
     {
         return Name;

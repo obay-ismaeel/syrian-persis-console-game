@@ -2,43 +2,81 @@
 
 static class Dice
 {
-    public static List<int> GetPlayerShifts()
+    public static List<int> GetPlayerShifts(bool isUserTurn)
     {
-        List<int> rolls = CollectTossesOutput();
-        List<int> moves = new();
+        List<int> rolls = isUserTurn ? CollectTossesOutput() : CollectTossesOutputComputer();
+        List<int> shifts = new();
         
         foreach(int roll in rolls)
         {
             switch(roll)
             {
                 case 0:
-                    moves.Add(6);
+                    shifts.Add(6);
                     break;
                 case 1:
-                    moves.Add(1);
-                    moves.Add(10);
+                    shifts.Add(1);
+                    shifts.Add(10);
                     break;
                 case 2:
-                    moves.Add(2);
+                    shifts.Add(2);
                     break;
                 case 3:
-                    moves.Add(3);
+                    shifts.Add(3);
                     break;
                 case 4:
-                    moves.Add(4);
+                    shifts.Add(4);
                     break;
                 case 5:
-                    moves.Add(1);
-                    moves.Add(24);
+                    shifts.Add(1);
+                    shifts.Add(24);
                     break;
                 case 6:
-                    moves.Add(12);
+                    shifts.Add(12);
                     break;
             }
         }
 
-        return moves;
-    } 
+        return shifts;
+    }
+
+    public static List<int> GetComputerShifts()
+    {
+        List<int> rolls = CollectTossesOutputComputer();
+        List<int> shifts = new();
+
+        foreach (int roll in rolls)
+        {
+            switch (roll)
+            {
+                case 0:
+                    shifts.Add(6);
+                    break;
+                case 1:
+                    shifts.Add(1);
+                    shifts.Add(10);
+                    break;
+                case 2:
+                    shifts.Add(2);
+                    break;
+                case 3:
+                    shifts.Add(3);
+                    break;
+                case 4:
+                    shifts.Add(4);
+                    break;
+                case 5:
+                    shifts.Add(1);
+                    shifts.Add(24);
+                    break;
+                case 6:
+                    shifts.Add(12);
+                    break;
+            }
+        }
+
+        return shifts;
+    }
 
     private static List<int> CollectTossesOutput()
     {
@@ -48,6 +86,25 @@ static class Dice
         {
             Console.Write("Press any key to toss the dice: ");
             Console.ReadKey(true);
+            int result = TossOnce();
+
+
+
+            Console.WriteLine(result);
+            tossResults.Add(result);
+            still = PlayAgain(result);
+        }
+        return tossResults;
+    }
+
+    private static List<int> CollectTossesOutputComputer()
+    {
+        List<int> tossResults = new();
+        bool still = true;
+        while (still)
+        {
+            Console.Write("Press any key to toss the dice: ");
+            Thread.Sleep(1500);
             int result = TossOnce();
 
 

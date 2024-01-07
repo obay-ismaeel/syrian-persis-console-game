@@ -171,6 +171,7 @@ class Board
         }
         return count;
     }
+
     public int FinishedPawns(Player player)
     {
         int count = 0;
@@ -193,10 +194,8 @@ class Board
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.Append($"OUT [USER:{OutPawns(Player.USER)} COM:{OutPawns(Player.COMPUTER)}]      ");
-        sb.Append($"|{userPath[74]}|{userPath[7]}|{userPath[8]}|\n");
-        sb.Append($"FINISHED [USER:{FinishedPawns(Player.USER)} COM:{FinishedPawns(Player.COMPUTER)}] ");
-        sb.Append($"|{userPath[73]}|{userPath[6]}|{userPath[9]}|\n");
+        sb.Append($"\t\t\t|{userPath[74]}|{userPath[7]}|{userPath[8]}|\n");
+        sb.Append($"\t\t\t[{userPath[73]}]{userPath[6]}[{userPath[9]}]\n");
         sb.Append($"\t\t\t|{userPath[72]}|{userPath[5]}|{userPath[10]}|\n");
         sb.Append($"\t\t\t|{userPath[71]}|{userPath[4]}|{userPath[11]}|\n");
         sb.Append($"\t\t\t|{userPath[70]}|{userPath[3]}|{userPath[12]}|\n");
@@ -204,14 +203,14 @@ class Board
         sb.Append($"\t\t\t|{userPath[68]}|{userPath[1]}|{userPath[14]}|\n");
         sb.Append($"\t\t\t|{userPath[67]}|{userPath[0]}|{userPath[15]}|\n");
         
-        sb.Append($"|{userPath[59]}|{userPath[60]}|{userPath[61]}|{userPath[62]}|{userPath[63]}|{userPath[64]}|{userPath[65]}|{userPath[66]}|\t " +
-            $"|{userPath[16]}|{userPath[17]}|{userPath[18]}|{userPath[19]}|{userPath[20]}|{userPath[21]}|{userPath[22]}|{userPath[23]}|\n");
+        sb.Append($"|{userPath[59]}[{userPath[60]}]{userPath[61]}|{userPath[62]}|{userPath[63]}|{userPath[64]}|{userPath[65]}|{userPath[66]}|\t " +
+            $"|{userPath[16]}|{userPath[17]}|{userPath[18]}|{userPath[19]}|{userPath[20]}|{userPath[21]}[{userPath[22]}]{userPath[23]}|\n");
 
         sb.Append($"|{userPath[58]}|  |  |  |  |  |  |  |\t " +
             $"|  |  |  |  |  |  |  |{userPath[24]}|\n");
 
-        sb.Append($"|{userPath[57]}|{userPath[56]}|{userPath[55]}|{userPath[54]}|{userPath[53]}|{userPath[52]}|{userPath[51]}|{userPath[50]}|\t " +
-            $"|{userPath[32]}|{userPath[31]}|{userPath[30]}|{userPath[29]}|{userPath[28]}|{userPath[27]}|{userPath[26]}|{userPath[25]}|\n");
+        sb.Append($"|{userPath[57]}[{userPath[56]}]{userPath[55]}|{userPath[54]}|{userPath[53]}|{userPath[52]}|{userPath[51]}|{userPath[50]}|\t " +
+            $"|{userPath[32]}|{userPath[31]}|{userPath[30]}|{userPath[29]}|{userPath[28]}|{userPath[27]}[{userPath[26]}]{userPath[25]}|\n");
 
         sb.Append($"\t\t\t|{userPath[49]}|{computerPath[0]}|{userPath[33]}|\n");
         sb.Append($"\t\t\t|{userPath[48]}|{computerPath[1]}|{userPath[34]}|\n");
@@ -219,8 +218,10 @@ class Board
         sb.Append($"\t\t\t|{userPath[46]}|{computerPath[3]}|{userPath[36]}|\n");
         sb.Append($"\t\t\t|{userPath[45]}|{computerPath[4]}|{userPath[37]}|\n");
         sb.Append($"\t\t\t|{userPath[44]}|{computerPath[5]}|{userPath[38]}|\n");
-        sb.Append($"\t\t\t|{userPath[43]}|{computerPath[6]}|{userPath[39]}|\n");
-        sb.Append($"\t\t\t|{userPath[42]}|{userPath[41]}|{userPath[40]}|\n");
+        sb.Append($"\t\t\t[{userPath[43]}]{computerPath[6]}[{userPath[39]}]");
+        sb.Append($"\tOUT [USER:{OutPawns(Player.USER)} COM:{OutPawns(Player.COMPUTER)}]\n");
+        sb.Append($"\t\t\t|{userPath[42]}|{userPath[41]}|{userPath[40]}|");
+        sb.Append($"\tFINISHED [USER:{FinishedPawns(Player.USER)} COM:{FinishedPawns(Player.COMPUTER)}]\n");
 
         
 
