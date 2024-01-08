@@ -13,6 +13,15 @@ class Board
     
     public readonly List<int> ProtectedCellsIndexes = new() { 9, 22, 26, 39, 43, 56, 60, 73 };
 
+    public Board(Board board, PawnMovement move)
+    {
+        UserPawns = board.UserPawns;
+        ComputerPawns = board.ComputerPawns;
+        userPath = board.userPath;
+        computerPath = board.computerPath;
+        MovePawn(move.Pawn, move.Shift);
+    }
+
     public Board()
     {
         //intializing the users pawns
@@ -191,9 +200,51 @@ class Board
         return false;
     }
 
+    //MOVE TO A SEPARATE CLASS
+    public int Evaluate()
+    {
+        int value = 0;
+        int MaxInPawns = InPawns(Player.COMPUTER) * 10;
+        int MinInPawns = InPawns(Player.USER) * -10;
+        int MaxProtectedPawns = ProtectedPawns(Player.COMPUTER) * 5;
+        int MinProtectedPawns = ProtectedPawns(Player.USER) * -5;
+        int MaxFinalKitchenPawns = FinalKitchenPawns(Player.COMPUTER) * 5;
+        int MinFinalKitchenPawns = FinalKitchenPawns(Player.USER) * -5;
+        
+        return value;
+    }
+
+    public int FinalKitchenPawns(Player player)
+    {
+        int count = 0;
+        if(player is Player.USER)
+        {
+            for(int i = 76; i < 84; i++)
+                count += userPath[i].Count();
+        }
+        else
+        {
+            for (int i = 76; i < 84; i++)
+                    count += computerPath[i].Count();
+        }
+        return count;
+    }
+
+    public int ProtectedPawns(Player player) 
+    {
+        int count = 0;
+        foreach(int index in ProtectedCellsIndexes)
+        {
+           if(userPath[index].BelongsTo(player)) count += userPath[index].Count();
+        }
+        return count;
+    }
+
+    public int InPawns(Player player) => 4 - OutPawns(player);
+
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append($"\t\t\t|{userPath[74]}|{userPath[7]}|{userPath[8]}|\n");
         sb.Append($"\t\t\t[{userPath[73]}]{userPath[6]}[{userPath[9]}]\n");
         sb.Append($"\t\t\t|{userPath[72]}|{userPath[5]}|{userPath[10]}|\n");

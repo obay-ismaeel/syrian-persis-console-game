@@ -13,7 +13,7 @@ class Game
         {
             ShowPlayerTurnAndCurrentBoard();
 
-            var shifts = Dice.GetPlayerShifts(isUserTurn);
+            var shifts = Dice.GetPlayerShifts(true);
             
             if( isUserTurn )
             {
@@ -31,7 +31,7 @@ class Game
 
                     Console.Write("Enter the number corresponding to the desired move: ");
 
-                    int number = getUserShiftChoiceInput(moves);
+                    int number = getUserMoveChoiceInput(moves);
 
                     board.MovePawn(moves[number].Pawn, moves[number].Shift);
 
@@ -44,9 +44,28 @@ class Game
             }
             else
             {
-                var moves = board.GetPossibleMoves(Player.COMPUTER, shifts);
+                while (shifts.Any())
+                {
+                    var moves = board.GetPossibleMoves(Player.COMPUTER, shifts);
 
-                ShowPossibleMoves(moves);
+                    ShowPossibleMoves(moves);
+
+                    if (!moves.Any())
+                    {
+                        Console.WriteLine("NO VALID MOVES AVAILABLE!");
+                        break;
+                    }
+
+                    Console.Write("Enter the number corresponding to the desired move: ");
+
+                    int number = getUserMoveChoiceInput(moves);
+
+                    board.MovePawn(moves[number].Pawn, moves[number].Shift);
+
+                    shifts.Remove(moves[number].Shift);
+
+                    ShowBoard();
+                }
 
                 isUserTurn = true;
             }
@@ -59,7 +78,7 @@ class Game
     {
         for (int i=0; i<moves.Count; i++)
         {
-            Console.WriteLine($"[{i}] Move pawn {moves[i].Pawn} by {moves[i].Shift} steps");
+            Console.WriteLine($"[{i+1}] Move pawn {moves[i].Pawn} by {moves[i].Shift} steps");
         }
     }
 
@@ -72,19 +91,19 @@ class Game
         Console.WriteLine(board + "\n");
     }
 
-    private int getUserShiftChoiceInput(List<PawnMovement> moves)
+    private int getUserMoveChoiceInput(List<PawnMovement> moves)
     {
         int number = int.MaxValue;
-        while (number >= moves.Count || number < 0)
+        while (number > moves.Count || number < 1)
         {
             Int32.TryParse(Console.ReadLine(), out number);
-            if (number >= moves.Count || number < 0)
+            if (number > moves.Count || number < 1)
             {
                 Console.WriteLine("INVALID INPUT!");
                 Console.Write("Enter the number corresponding to the desired move: ");
             } 
         }
-        return number;
+        return number-1;
     }
    
 
