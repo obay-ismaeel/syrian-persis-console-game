@@ -64,7 +64,7 @@ class Cell
 
     public int Count() => Content.Count();
 
-    public bool IsEmpty() => Content.Any(); 
+    public bool IsEmpty() => !Content.Any(); 
 
     public override string ToString()
     {

@@ -203,13 +203,15 @@ class Board
     //MOVE TO A SEPARATE CLASS
     public int Evaluate()
     {
-        int value = 0;
-        int MaxInPawns = InPawns(Player.COMPUTER) * 10;
-        int MinInPawns = InPawns(Player.USER) * -10;
-        int MaxProtectedPawns = ProtectedPawns(Player.COMPUTER) * 5;
-        int MinProtectedPawns = ProtectedPawns(Player.USER) * -5;
-        int MaxFinalKitchenPawns = FinalKitchenPawns(Player.COMPUTER) * 5;
-        int MinFinalKitchenPawns = FinalKitchenPawns(Player.USER) * -5;
+        var MaxInPawns = InPawns(Player.COMPUTER) * 10;
+        var MinInPawns = InPawns(Player.USER) * -10;
+        var MaxProtectedPawns = ProtectedPawns(Player.COMPUTER) * 5;
+        var MinProtectedPawns = ProtectedPawns(Player.USER) * -5;
+        var MaxFinalKitchenPawns = FinalKitchenPawns(Player.COMPUTER) * 5;
+        var MinFinalKitchenPawns = FinalKitchenPawns(Player.USER) * -5;
+        
+        var value = MaxInPawns + MinInPawns + MaxProtectedPawns 
+            + MinFinalKitchenPawns + MaxFinalKitchenPawns + MinFinalKitchenPawns;
         
         return value;
     }
@@ -273,9 +275,6 @@ class Board
         sb.Append($"\tOUT [USER:{OutPawns(Player.USER)} COM:{OutPawns(Player.COMPUTER)}]\n");
         sb.Append($"\t\t\t|{userPath[42]}|{userPath[41]}|{userPath[40]}|");
         sb.Append($"\tFINISHED [USER:{FinishedPawns(Player.USER)} COM:{FinishedPawns(Player.COMPUTER)}]\n");
-
-        
-
         sb.Append("\n");
 
         return sb.ToString();
