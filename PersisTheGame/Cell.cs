@@ -26,8 +26,13 @@ class Cell
             return;
         }
         
-        for(int i=0; i<Content.Count; i++)
-            Content[i].Position = -1;
+        //for(int i=0; i<Content.Count; i++)
+        //    Content[i].Position = -1;
+
+        Content.ForEach(item => 
+        {
+            item.Position = -1;
+        });
 
         Content.Clear();
         
@@ -46,11 +51,17 @@ class Cell
     {
         List<string> list = new();
 
-        for(int i=0; i < Content.Count; i++)
+        //for(int i=0; i < Content.Count; i++)
+        //{
+        //    Content[i].Position = -1;
+        //    list.Add(Content[i].Name);
+        //}
+
+        Content.ForEach(item =>
         {
-            Content[i].Position = -1;
-            list.Add(Content[i].Name);
-        }
+            item.Position = -1;
+            list.Add(item.Name);
+        });
         Content.Clear();
 
         return list;
@@ -62,7 +73,7 @@ class Cell
         return Content.First().Player == player;
     }
 
-    public int Count() => Content.Count();
+    public int Count() => Content.Count;
 
     public bool IsEmpty() => !Content.Any(); 
 

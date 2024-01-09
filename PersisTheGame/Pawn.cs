@@ -12,6 +12,7 @@ class Pawn
         this.Player = player;
     }
 
+
     public override string ToString()
     {
         return Name;

@@ -4,14 +4,14 @@ namespace PersisTheGame;
 
 class Game
 {
-    private readonly Board board = new Board();
+    private readonly Board board = new();
     private bool isUserTurn = true;
 
     public void Play()
     {
         while( ! board.IsTerminal() )
         {
-            ShowPlayerTurnAndCurrentBoard();
+            showPlayerTurnAndCurrentBoard();
 
             var shifts = Dice.GetPlayerShifts(true);
             
@@ -21,7 +21,7 @@ class Game
                 {
                     var moves = board.GetPossibleMoves(Player.USER, shifts);
                 
-                    ShowPossibleMoves(moves);
+                    showPossibleMoves(moves);
 
                     if (!moves.Any())
                     {
@@ -48,7 +48,7 @@ class Game
                 {
                     var moves = board.GetPossibleMoves(Player.COMPUTER, shifts);
 
-                    ShowPossibleMoves(moves);
+                    showPossibleMoves(moves);
 
                     if (!moves.Any())
                     {
@@ -74,15 +74,15 @@ class Game
 
     private void ShowBoard() => Console.WriteLine(board);
 
-    private void ShowPossibleMoves(List<PawnMovement> moves)
+    private void showPossibleMoves(List<PawnMovement> moves)
     {
-        for (int i=0; i<moves.Count; i++)
+        for (int i=0; i< moves.Count; i++)
         {
             Console.WriteLine($"[{i+1}] Move pawn {moves[i].Pawn} by {moves[i].Shift} steps");
         }
     }
 
-    private void ShowPlayerTurnAndCurrentBoard()
+    private void showPlayerTurnAndCurrentBoard()
     {
         Console.WriteLine("=================================================");
         if (isUserTurn) Console.WriteLine($"YOUR TURN");
@@ -96,7 +96,7 @@ class Game
         int number = int.MaxValue;
         while (number > moves.Count || number < 1)
         {
-            Int32.TryParse(Console.ReadLine(), out number);
+            int.TryParse(Console.ReadLine(), out number);
             if (number > moves.Count || number < 1)
             {
                 Console.WriteLine("INVALID INPUT!");

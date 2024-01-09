@@ -5,18 +5,18 @@ namespace PersisTheGame;
 
 class Board
 {
-    public List<Pawn> UserPawns = new();
-    public List<Pawn> ComputerPawns = new();
+    private List<Pawn> userPawns = new();
+    private List<Pawn> computerPawns = new();
     
-    public List<Cell> userPath = new List<Cell>();
-    public List<Cell> computerPath = new List<Cell>();
+    private List<Cell> userPath = new();
+    private List<Cell> computerPath = new();
     
     public readonly List<int> ProtectedCellsIndexes = new() { 9, 22, 26, 39, 43, 56, 60, 73 };
 
     public Board(Board board, PawnMovement move)
     {
-        UserPawns = board.UserPawns;
-        ComputerPawns = board.ComputerPawns;
+        userPawns = board.userPawns;
+        computerPawns = board.computerPawns;
         userPath = board.userPath;
         computerPath = board.computerPath;
         MovePawn(move.Pawn, move.Shift);
@@ -25,17 +25,17 @@ class Board
     public Board()
     {
         //intializing the users pawns
-        for(int i=1; i<=4; i++)
+        for (int i = 1; i <= 4; i++)
         {
-            UserPawns.Add(new Pawn(Player.USER,$"U{i}"));
-            ComputerPawns.Add(new Pawn(Player.COMPUTER, $"C{i}"));
+            userPawns.Add(new Pawn(Player.USER,$"U{i}"));
+            computerPawns.Add(new Pawn(Player.COMPUTER, $"C{i}"));
         }
 
         //intializing the user path 
-        for (int i=0; i<7; i++)
+        for (int i = 0; i < 7; i++)
             userPath.Add(new Cell(false, CellType.USER_KITCHEN));
         
-        for(int i=7; i<75; i++)
+        for (int i = 7; i < 75; i++)
         {
             if (ProtectedCellsIndexes.Contains(i))
                 userPath.Add(new Cell(true, CellType.SHARED));
@@ -66,7 +66,7 @@ class Board
 
     public List<PawnMovement> GetPossibleMoves(Player player, List<int> shifts)
     {
-        List<PawnMovement> moves = new List<PawnMovement>();
+        List<PawnMovement> moves = new();
 
         foreach(var shift in shifts)
         {
@@ -80,15 +80,17 @@ class Board
             }
         }
 
-        var uniqueMoves= moves
+        var uniqueMoves = moves
         .GroupBy(m => new { m.Pawn.Position, m.Shift })
         .Select(group => group.First())
+        .OrderBy(m => m.Pawn.Name)
+        .ThenBy(m =>  m.Shift)
         .ToList();
 
         return uniqueMoves;
     }
 
-    private List<Pawn> GetPlayerPawns(Player player) => player is Player.USER ? UserPawns : ComputerPawns;
+    private List<Pawn> GetPlayerPawns(Player player) => player is Player.USER ? userPawns : computerPawns;
 
     public void MovePawn(Pawn pawn, int shift)
     {
@@ -100,7 +102,7 @@ class Board
         
         pawn.Position = newPosition;
         
-        if(pawn.Player is Player.USER)
+        if (pawn.Player is Player.USER)
         {
             if(oldPosition is not -1) userPath[oldPosition].Remove(pawn);
 
@@ -130,19 +132,19 @@ class Board
 
     public void UpdateIndexes(List<string> pawns, int newIndex)
     {
-        for (int i = 0; i < UserPawns.Count; i++)
+        for (int i = 0; i < 4; i++)
         {
-            if (pawns.Contains(UserPawns[i].Name)) UserPawns[i].Position = newIndex;
-            if (pawns.Contains(ComputerPawns[i].Name)) ComputerPawns[i].Position = newIndex;
+            if (pawns.Contains(userPawns[i].Name)) userPawns[i].Position = newIndex;
+            if (pawns.Contains(computerPawns[i].Name)) computerPawns[i].Position = newIndex;
         }
     }
 
     public void UpdateIndexes(string pawn, int newIndex)
     {
-        for (int i = 0; i < UserPawns.Count; i++)
+        for (int i = 0; i < 4; i++)
         {
-            if (pawn == UserPawns[i].Name) UserPawns[i].Position = newIndex;
-            if (pawn == ComputerPawns[i].Name) ComputerPawns[i].Position = newIndex;
+            if (pawn == userPawns[i].Name) userPawns[i].Position = newIndex;
+            if (pawn == computerPawns[i].Name) computerPawns[i].Position = newIndex;
         }
     }
 
@@ -191,7 +193,7 @@ class Board
         return count;
     }
 
-    public List<Pawn> PlayerPawns(Player player) => player is Player.USER ? UserPawns : ComputerPawns;
+    public List<Pawn> PlayerPawns(Player player) => player is Player.USER ? userPawns : computerPawns;
 
     public bool IsTerminal()
     {
@@ -210,10 +212,8 @@ class Board
         var MaxFinalKitchenPawns = FinalKitchenPawns(Player.COMPUTER) * 5;
         var MinFinalKitchenPawns = FinalKitchenPawns(Player.USER) * -5;
         
-        var value = MaxInPawns + MinInPawns + MaxProtectedPawns 
-            + MinFinalKitchenPawns + MaxFinalKitchenPawns + MinFinalKitchenPawns;
-        
-        return value;
+        return MaxInPawns + MinInPawns + MaxProtectedPawns
+            + MinProtectedPawns + MaxFinalKitchenPawns + MinFinalKitchenPawns;
     }
 
     public int FinalKitchenPawns(Player player)
@@ -227,7 +227,7 @@ class Board
         else
         {
             for (int i = 76; i < 84; i++)
-                    count += computerPath[i].Count();
+                count += computerPath[i].Count();
         }
         return count;
     }
