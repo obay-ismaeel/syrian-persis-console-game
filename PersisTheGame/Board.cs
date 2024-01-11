@@ -15,26 +15,62 @@ class Board
 
     public Board(Board board, PawnMovement move)
     {
-        userPawns = board.userPawns;
-        computerPawns = board.computerPawns;
-        userPath = board.userPath;
-        computerPath = board.computerPath;
+        userPawns = board.userPawns.DeepClone()!;
+        computerPawns = board.computerPawns.DeepClone()!;
+        userPath = board.userPath.DeepClone()!;
+        computerPath = board.computerPath.DeepClone()!;
         MovePawn(move.Pawn, move.Shift);
     }
 
     public Board()
     {
-        //intializing the users pawns
+        InitializePawns();
+        InitializeUserPath();
+        InitializeComputerPath();
+    }
+
+    //public List<Board> GetPossibleBoards(Player player, List<int> shifts)
+    //{
+    //    HashSet<Board> children = new();
+    //    PossibleBoards(player, shifts, children);
+    //    return children.ToList();
+    //}
+
+    //private void PossibleNextStates(Player player, List<int> shifts, HashSet<Board> boards)
+    //{
+    //    var moves = GetPossibleMoves(player, shifts);
+
+    //    if (!shifts.Any() || !moves.Any())
+    //    {
+    //        boards.Add(this);
+    //        return;
+    //    }
+
+    //    foreach (var move in moves)
+    //    {
+    //        var board = new Board(this, move);
+    //        var newShifts = new List<int>(shifts);
+    //        newShifts.Remove(move.Shift);
+    //        board.PossibleBoards(player, newShifts, boards);
+    //    }
+
+
+    //}
+
+    private void InitializePawns()
+    {
         for (int i = 1; i <= 4; i++)
         {
-            userPawns.Add(new Pawn(Player.USER,$"U{i}"));
+            userPawns.Add(new Pawn(Player.USER, $"U{i}"));
             computerPawns.Add(new Pawn(Player.COMPUTER, $"C{i}"));
         }
+    }
 
-        //intializing the user path 
+    private void InitializeUserPath()
+    {
         for (int i = 0; i < 7; i++)
             userPath.Add(new Cell(false, CellType.USER_KITCHEN));
-        
+
         for (int i = 7; i < 75; i++)
         {
             if (ProtectedCellsIndexes.Contains(i))
@@ -46,9 +82,12 @@ class Board
         for (int i = 7; i >= 0; i--)
             userPath.Add(userPath[i]);
 
-        userPath.Add(new Cell( false, CellType.USER_KITCHEN ));
+        userPath.Add(new Cell(false, CellType.USER_KITCHEN));
+    }
 
-        //intializing the computer path 
+    private void InitializeComputerPath()
+    {
+        //initializing the computer path 
         for (int i = 0; i < 7; i++)
             computerPath.Add(new Cell(false, CellType.COMPUTER_KITCHEN));
 
@@ -60,8 +99,8 @@ class Board
 
         for (int i = 6; i >= 0; i--)
             computerPath.Add(computerPath[i]);
-        
-        computerPath.Add(new Cell( false, CellType.COMPUTER_KITCHEN ));
+
+        computerPath.Add(new Cell(false, CellType.COMPUTER_KITCHEN));
     }
 
     public List<PawnMovement> GetPossibleMoves(Player player, List<int> shifts)
@@ -202,7 +241,6 @@ class Board
         return false;
     }
 
-    //MOVE TO A SEPARATE CLASS
     public int Evaluate()
     {
         var MaxInPawns = InPawns(Player.COMPUTER) * 10;
@@ -280,4 +318,17 @@ class Board
         return sb.ToString();
     }
 
+    public override int GetHashCode()
+    {
+        unchecked // Overflow is fine, just wrap
+        {
+            int hash = 17;
+            // Incorporate the hash codes of all elements in the array
+            foreach (var pawn in userPawns)
+                hash = hash * 31 + (pawn.Position is -1 ? 100 : pawn.Position);
+            foreach (var pawn in computerPawns)
+                hash = hash * 31 + (pawn.Position is -1 ? 100 : pawn.Position);
+            return hash;
+        }
+    }
 }

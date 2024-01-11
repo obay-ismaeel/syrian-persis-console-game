@@ -103,7 +103,7 @@ static class Dice
         return tossResults;
     }
 
-    private static bool PlayAgain(int rollResult) => rollResult == 0 || rollResult == 1 || rollResult == 5 || rollResult == 6;
+    public static bool PlayAgain(int rollResult) => rollResult == 0 || rollResult == 1 || rollResult == 5 || rollResult == 6;
 
     private static int TossOnce()
     {
@@ -118,9 +118,9 @@ static class Dice
         return result;
     }
 
-    public static double GetShiftPossibility(int shift)
+    public static double GetTossPossibility(int toss)
     {
-        return shift switch
+        return toss switch
         {
             0 => (double)1  / 64,
             1 => (double)6  / 64,
@@ -130,6 +130,21 @@ static class Dice
             5 => (double)6  / 64,
             6 => (double)1  / 64,
             _ => throw new InvalidOperationException("The shift you asked for doesn't exist!"),
+        };
+    }
+
+    public static List<int> GetShifts(int toss)
+    {
+        return toss switch
+        {
+            0 => new List<int> { 6 },
+            1 => new List<int> { 1, 10 },
+            2 => new List<int> { 2 },
+            3 => new List<int> { 3 },
+            4 => new List<int> { 4 },
+            5 => new List<int> { 1, 25 },
+            6 => new List<int> { 12 },
+            _ => throw new InvalidOperationException("The toss you entered doesn't exist!")
         };
     }
 }
