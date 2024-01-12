@@ -12,6 +12,12 @@ class Pawn
         this.Player = player;
     }
 
+    public Pawn(Pawn pawn)
+    {
+        Name = pawn.Name;
+        Player = pawn.Player;
+        Position = pawn.Position;
+    }
 
     public override string ToString()
     {

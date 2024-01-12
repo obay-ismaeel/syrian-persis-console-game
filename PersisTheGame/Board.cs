@@ -13,21 +13,31 @@ class Board
     
     public readonly List<int> ProtectedCellsIndexes = new() { 9, 22, 26, 39, 43, 56, 60, 73 };
 
-    public Board(Board board, PawnMovement move)
+    public Board(Board board, PawnMovement move) : this( board )
     {
-        userPawns = new List<Pawn>(board.userPawns);
-        computerPawns = new List<Pawn>(board.computerPawns);
-        userPath = new List<Cell>(board.userPath);
-        computerPath = new List<Cell>(board.computerPath);
-        if(move.Shift is not 0) MovePawn(move.Pawn, move.Shift);
+        if(move.Shift is not 0) 
+            MovePawn(move.Pawn, move.Shift);
     }
 
     public Board(Board board)
     {
-        userPawns = board.userPawns;
-        computerPawns = board.computerPawns;
-        userPath = board.userPath;
-        computerPath = board.computerPath;
+        board.userPawns.ForEach(pawn =>
+        {
+            userPawns.Add(new Pawn(pawn));
+        });
+        board.computerPawns.ForEach(pawn =>
+        {
+            computerPawns.Add(new Pawn(pawn));
+        });
+        board.userPath.ForEach(cell =>
+        {
+            userPath.Add(new Cell(cell));
+        });
+        board.computerPath.ForEach(cell =>
+        {
+            computerPath.Add(new Cell(cell));
+        });
+
     }
 
     public Board()
@@ -36,34 +46,6 @@ class Board
         InitializeUserPath();
         InitializeComputerPath();
     }
-
-    //public List<Board> GetPossibleBoards(Player player, List<int> shifts)
-    //{
-    //    HashSet<Board> children = new();
-    //    PossibleBoards(player, shifts, children);
-    //    return children.ToList();
-    //}
-
-    //private void PossibleNextStates(Player player, List<int> shifts, HashSet<Board> boards)
-    //{
-    //    var moves = GetPossibleMoves(player, shifts);
-
-    //    if (!shifts.Any() || !moves.Any())
-    //    {
-    //        boards.Add(this);
-    //        return;
-    //    }
-
-    //    foreach (var move in moves)
-    //    {
-    //        var board = new Board(this, move);
-    //        var newShifts = new List<int>(shifts);
-    //        newShifts.Remove(move.Shift);
-    //        board.PossibleBoards(player, newShifts, boards);
-    //    }
-
-
-    //}
 
     private void InitializePawns()
     {

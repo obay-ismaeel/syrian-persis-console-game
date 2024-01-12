@@ -12,6 +12,15 @@ class Cell
     {
         
     }
+    public Cell (Cell cell)
+    {
+        cell.Content.ForEach(pawn =>
+        {
+            Content.Add(new Pawn(pawn));
+        });
+        IsProtected = cell.IsProtected;
+        Type = cell.Type;
+    }
     public Cell(bool isProtected, CellType type)
     {
         IsProtected = isProtected;

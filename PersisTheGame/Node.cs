@@ -5,9 +5,9 @@ internal class Node : Board
     public Node? Parent;
     public PawnMovement? Move;
     public double Possibilty;
-    public List<Node> Children = new List<Node>();
+    public List<Node> Children = new();
     public bool IsChance = false;
-    public List<int> Shifts = new List<int>();
+    public List<int> Shifts = new();
     //public bool PlayAgain = false;
     //public bool DidPlayAgain = false;
     public Player PlayerTurn = Player.COMPUTER;
