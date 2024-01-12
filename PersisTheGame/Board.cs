@@ -5,8 +5,8 @@ namespace PersisTheGame;
 
 class Board
 {
-    private List<Pawn> userPawns = new();
-    private List<Pawn> computerPawns = new();
+    protected List<Pawn> userPawns = new();
+    protected List<Pawn> computerPawns = new();
     
     private List<Cell> userPath = new();
     private List<Cell> computerPath = new();
@@ -20,6 +20,14 @@ class Board
         userPath = board.userPath.DeepClone()!;
         computerPath = board.computerPath.DeepClone()!;
         MovePawn(move.Pawn, move.Shift);
+    }
+
+    public Board(Board board)
+    {
+        userPawns = board.userPawns;
+        computerPawns = board.computerPawns;
+        userPath = board.userPath;
+        computerPath = board.computerPath;
     }
 
     public Board()
