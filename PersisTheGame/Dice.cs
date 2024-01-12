@@ -122,13 +122,13 @@ static class Dice
     {
         return toss switch
         {
-            0 => (double)1  / 64,
-            1 => (double)6  / 64,
-            2 => (double)15 / 64,
-            3 => (double)20 / 64,
-            4 => (double)15 / 64,
-            5 => (double)6  / 64,
-            6 => (double)1  / 64,
+            0 => (double)Math.Pow(0.6, 6),
+            1 => (double)Math.Pow(0.6, 5) * 2.4,
+            2 => (double)Math.Pow(0.4, 2) * Math.Pow(0.6, 4) * 15,
+            3 => (double)Math.Pow(0.4, 3) * Math.Pow(0.6, 3) * 20,
+            4 => (double)Math.Pow(0.4, 4) * Math.Pow(0.6, 2) * 15,
+            5 => (double)Math.Pow(0.4, 5) * 3.6,
+            6 => (double)Math.Pow(0.4, 6),
             _ => throw new InvalidOperationException("The shift you asked for doesn't exist!"),
         };
     }
