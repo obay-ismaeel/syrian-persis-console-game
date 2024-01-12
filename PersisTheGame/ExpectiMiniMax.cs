@@ -2,16 +2,20 @@
 
 static class ExpectiMiniMax
 {
+    public static int Solve(Node node, List<int> shifts)
+    {
+        return Value(node, shifts, true, 6);
+    }
+
     public static int Value(Node node, List<int> shifts, bool isMaxPlayer, int depth)
     {
         if (node.IsTerminal() || depth is 0)
             return node.Evaluate();
-        else if ( shifts.Count is 0 || node.GetPossibleMoves(isMaxPlayer ? Player.COMPUTER : Player.USER ,shifts).Count is 0 )
+        if ( shifts.Count is 0 || node.GetPossibleMoves(isMaxPlayer ? Player.COMPUTER : Player.USER ,shifts).Count is 0 )
             return ChanceValue(node, isMaxPlayer, depth);
-        else if (isMaxPlayer)
+        if (isMaxPlayer)
             return MaxValue(node, shifts, isMaxPlayer, depth);
-        else
-            return MinValue(node, shifts, isMaxPlayer, depth);
+        return MinValue(node, shifts, isMaxPlayer, depth);
     }
 
     public static int MaxValue(Node node, List<int> shifts, bool isMaxPlayer, int depth)
