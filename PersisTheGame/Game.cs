@@ -76,7 +76,7 @@ class Game
 
     private void showPossibleMoves(List<PawnMovement> moves)
     {
-        for (int i=0; i< moves.Count; i++)
+        for (int i = 0; i < moves.Count; i++)
         {
             Console.WriteLine($"[{i+1}] Move pawn {moves[i].Pawn} by {moves[i].Shift} steps");
         }
@@ -105,6 +105,4 @@ class Game
         }
         return number-1;
     }
-   
-
 }

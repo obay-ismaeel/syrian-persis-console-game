@@ -1,6 +1,4 @@
-﻿using System.Transactions;
-
-namespace PersisTheGame;
+﻿namespace PersisTheGame;
 
 internal class Node : Board
 {
@@ -13,6 +11,16 @@ internal class Node : Board
     //public bool PlayAgain = false;
     //public bool DidPlayAgain = false;
     public Player PlayerTurn = Player.COMPUTER;
+
+    public Node(Board board, PawnMovement move) : base (board, move)
+    {
+
+    } 
+
+    public Node(Board current, List<int> shifts) : base(current)
+    {
+        Shifts = shifts;
+    }
 
     public Node(Node parent, PawnMovement move, List<int> shifts) : base (parent, move)
     {

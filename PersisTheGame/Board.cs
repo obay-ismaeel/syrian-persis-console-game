@@ -5,8 +5,8 @@ namespace PersisTheGame;
 
 class Board
 {
-    protected List<Pawn> userPawns = new();
-    protected List<Pawn> computerPawns = new();
+    public List<Pawn> userPawns = new();
+    public List<Pawn> computerPawns = new();
     
     private List<Cell> userPath = new();
     private List<Cell> computerPath = new();
@@ -15,11 +15,11 @@ class Board
 
     public Board(Board board, PawnMovement move)
     {
-        userPawns = board.userPawns.DeepClone()!;
-        computerPawns = board.computerPawns.DeepClone()!;
-        userPath = board.userPath.DeepClone()!;
-        computerPath = board.computerPath.DeepClone()!;
-        MovePawn(move.Pawn, move.Shift);
+        userPawns = new List<Pawn>(board.userPawns);
+        computerPawns = new List<Pawn>(board.computerPawns);
+        userPath = new List<Cell>(board.userPath);
+        computerPath = new List<Cell>(board.computerPath);
+        if(move.Shift is not 0) MovePawn(move.Pawn, move.Shift);
     }
 
     public Board(Board board)
@@ -143,7 +143,7 @@ class Board
     {
         var newPosition = NextPosition(pawn, shift);
 
-        if (newPosition is -1) throw new InvalidOperationException();
+        if (newPosition is -1) return;
         
         var oldPosition = pawn.Position;
         
