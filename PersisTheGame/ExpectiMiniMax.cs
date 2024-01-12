@@ -2,19 +2,38 @@
 
 static class ExpectiMiniMax
 {
-    public static int Solve(Node node, List<int> shifts)
+    public static PawnMovement Solve(Node node, List<int> shifts)
     {
-        return Value(node, shifts, true, 6);
+        int bestValue = int.MinValue;
+        PawnMovement? bestMove = null;
+
+        foreach(var move in node.GetPossibleMoves(Player.COMPUTER, shifts))
+        {
+            var child = new Node(node, move);
+            List<int> newShifts = new List<int>(shifts);
+            newShifts.Remove(move.Shift);
+            var value = Value(child, newShifts, true, 6);
+            if(value >= bestValue)
+            {
+                bestValue = value;
+                bestMove = move;
+            }
+        }
+
+        return bestMove;
     }
 
     public static int Value(Node node, List<int> shifts, bool isMaxPlayer, int depth)
     {
         if (node.IsTerminal() || depth is 0)
             return node.Evaluate();
+        
         if ( shifts.Count is 0 || node.GetPossibleMoves(isMaxPlayer ? Player.COMPUTER : Player.USER ,shifts).Count is 0 )
             return ChanceValue(node, isMaxPlayer, depth);
+        
         if (isMaxPlayer)
             return MaxValue(node, shifts, isMaxPlayer, depth);
+        
         return MinValue(node, shifts, isMaxPlayer, depth);
     }
 

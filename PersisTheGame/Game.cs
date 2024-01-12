@@ -17,59 +17,98 @@ class Game
             
             if( isUserTurn )
             {
-                while (shifts.Any())
-                {
-                    var moves = board.GetPossibleMoves(Player.USER, shifts);
-                
-                    showPossibleMoves(moves);
-
-                    if (!moves.Any())
-                    {
-                        Console.WriteLine("NO VALID MOVES AVAILABLE!");
-                        break;
-                    }
-
-                    Console.Write("Enter the number corresponding to the desired move: ");
-
-                    int number = getUserMoveChoiceInput(moves);
-
-                    board.MovePawn(moves[number].Pawn, moves[number].Shift);
-
-                    shifts.Remove(moves[number].Shift);
-
-                    ShowBoard();
-                }
-
-                isUserTurn = false;
+                UserTurnLogic(shifts);
             }
             else
             {
-                while (shifts.Any())
-                {
-                    var moves = board.GetPossibleMoves(Player.COMPUTER, shifts);
-
-                    showPossibleMoves(moves);
-
-                    if (!moves.Any())
-                    {
-                        Console.WriteLine("NO VALID MOVES AVAILABLE!");
-                        break;
-                    }
-
-                    Console.Write("Enter the number corresponding to the desired move: ");
-
-                    int number = getUserMoveChoiceInput(moves);
-
-                    board.MovePawn(moves[number].Pawn, moves[number].Shift);
-
-                    shifts.Remove(moves[number].Shift);
-
-                    ShowBoard();
-                }
-
-                isUserTurn = true;
+                ComputerTurnLogic(shifts);
             }
         }
+    }
+
+    private void ComputerTurnLogic(List<int> shifts)
+    {
+        while (shifts.Any())
+        {
+            var moves = board.GetPossibleMoves(Player.COMPUTER, shifts);
+
+
+            showPossibleMoves(moves);
+
+            if (!moves.Any())
+            {
+                Console.WriteLine("NO VALID MOVES AVAILABLE!");
+                break;
+            }
+
+            var move = ExpectiMiniMax.Solve(new Node(board), shifts);
+
+            Console.WriteLine($"pawn:{move.Pawn}, shift:{move.Shift}");
+
+            board.MovePawn(move.Pawn, move.Shift);
+
+            shifts.Remove(move.Shift);
+
+            ShowBoard();
+        }
+
+        isUserTurn = true;
+    }
+
+    private void TheOtherUserTurnLogic(List<int> shifts)
+    {
+        while (shifts.Any())
+        {
+            var moves = board.GetPossibleMoves(Player.COMPUTER, shifts);
+
+            showPossibleMoves(moves);
+
+            if (!moves.Any())
+            {
+                Console.WriteLine("NO VALID MOVES AVAILABLE!");
+                break;
+            }
+
+            Console.Write("Enter the number corresponding to the desired move: ");
+
+            int number = getUserMoveChoiceInput(moves);
+
+            board.MovePawn(moves[number].Pawn, moves[number].Shift);
+
+            shifts.Remove(moves[number].Shift);
+
+            ShowBoard();
+        }
+
+        isUserTurn = true;
+    }
+
+    private void UserTurnLogic(List<int> shifts)
+    {
+        while (shifts.Any())
+        {
+            var moves = board.GetPossibleMoves(Player.USER, shifts);
+
+            showPossibleMoves(moves);
+
+            if (!moves.Any())
+            {
+                Console.WriteLine("NO VALID MOVES AVAILABLE!");
+                break;
+            }
+
+            Console.Write("Enter the number corresponding to the desired move: ");
+
+            int number = getUserMoveChoiceInput(moves);
+
+            board.MovePawn(moves[number].Pawn, moves[number].Shift);
+
+            shifts.Remove(moves[number].Shift);
+
+            ShowBoard();
+        }
+
+        isUserTurn = false;
     }
 
     private void ShowBoard() => Console.WriteLine(board);

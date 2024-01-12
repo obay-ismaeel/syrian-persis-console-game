@@ -123,6 +123,18 @@ class Board
 
     public void MovePawn(Pawn pawn, int shift)
     {
+        for (int i = 0; i < 4; i++)
+        {
+            if (userPawns[i].Name == pawn.Name)
+            {
+                pawn = userPawns[i];
+            }
+            if (computerPawns[i].Name == pawn.Name)
+            {
+                pawn = computerPawns[i];
+            }
+        }
+
         var newPosition = NextPosition(pawn, shift);
 
         if (newPosition is -1) return;
