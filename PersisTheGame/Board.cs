@@ -207,7 +207,7 @@ class Board
         }
         else
         {
-            if (userPath[nextPosition].IsProtected && userPath[nextPosition].BelongsTo(Player.USER))
+            if (computerPath[nextPosition].IsProtected && computerPath[nextPosition].BelongsTo(Player.USER))
                 return -1;
         }
 
