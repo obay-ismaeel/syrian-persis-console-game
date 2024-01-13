@@ -13,10 +13,11 @@ class Board
     
     public readonly List<int> ProtectedCellsIndexes = new() { 9, 22, 26, 39, 43, 56, 60, 73 };
 
-    public Board(Board board, PawnMovement move) : this( board )
+    public Board()
     {
-        if(move.Shift is not 0) 
-            MovePawn(move.Pawn, move.Shift);
+        InitializePawns();
+        InitializeUserPath();
+        InitializeComputerPath();
     }
 
     public Board(Board board)
@@ -40,11 +41,10 @@ class Board
 
     }
 
-    public Board()
+    public Board(Board board, PawnMovement move) : this( board )
     {
-        InitializePawns();
-        InitializeUserPath();
-        InitializeComputerPath();
+        if(move.Shift is not 0) 
+            MovePawn(move.Pawn, move.Shift);
     }
 
     private void InitializePawns()
@@ -236,12 +236,7 @@ class Board
 
     public List<Pawn> PlayerPawns(Player player) => player is Player.USER ? userPawns : computerPawns;
 
-    public bool IsTerminal()
-    {
-        if (userPath[83].Count() is 4) return true;
-        if (computerPath[83].Count() is 4) return true;
-        return false;
-    }
+    public bool IsTerminal() => userPath[83].Count() is 4 || computerPath[83].Count() is 4;
 
     public int Evaluate()
     {

@@ -12,6 +12,7 @@ class Cell
     {
         
     }
+
     public Cell (Cell cell)
     {
         cell.Content.ForEach(pawn =>
