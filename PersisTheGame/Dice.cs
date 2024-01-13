@@ -31,44 +31,6 @@ static class Dice
         return shifts;
     }
 
-    //public static List<int> GetComputerShifts()
-    //{
-    //    List<int> rolls = CollectTossesOutputComputer();
-    //    List<int> shifts = new();
-
-    //    foreach (int roll in rolls)
-    //    {
-    //        switch (roll)
-    //        {
-    //            case 0:
-    //                shifts.Add(6);
-    //                break;
-    //            case 1:
-    //                shifts.Add(1);
-    //                shifts.Add(10);
-    //                break;
-    //            case 2:
-    //                shifts.Add(2);
-    //                break;
-    //            case 3:
-    //                shifts.Add(3);
-    //                break;
-    //            case 4:
-    //                shifts.Add(4);
-    //                break;
-    //            case 5:
-    //                shifts.Add(1);
-    //                shifts.Add(24);
-    //                break;
-    //            case 6:
-    //                shifts.Add(12);
-    //                break;
-    //        }
-    //    }
-
-    //    return shifts;
-    //}
-
     private static List<int> CollectTossesOutput()
     {
         List<int> tossResults = new();
@@ -109,12 +71,12 @@ static class Dice
     {
         int result = 0;
         Random random = new();
-        result += random.Next(0, 2);
-        result += random.Next(0, 2);
-        result += random.Next(0, 2);
-        result += random.Next(0, 2);
-        result += random.Next(0, 2);
-        result += random.Next(0, 2);
+        result += random.Next(0, 10) < 4 ? 1 : 0;
+        result += random.Next(0, 10) < 4 ? 1 : 0;
+        result += random.Next(0, 10) < 4 ? 1 : 0;
+        result += random.Next(0, 10) < 4 ? 1 : 0;
+        result += random.Next(0, 10) < 4 ? 1 : 0;
+        result += random.Next(0, 10) < 4 ? 1 : 0;
         return result;
     }
 
