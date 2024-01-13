@@ -12,7 +12,7 @@ static class ExpectiMiniMax
             var child = new Node(node, move);
             List<int> newShifts = new List<int>(shifts);
             newShifts.Remove(move.Shift);
-            var value = Value(child, newShifts, true, 6);
+            var value = Value(child, newShifts, true, 7);
             if(value >= bestValue)
             {
                 bestValue = value;
@@ -20,7 +20,7 @@ static class ExpectiMiniMax
             }
         }
 
-        return bestMove;
+        return bestMove!;
     }
 
     public static int Value(Node node, List<int> shifts, bool isMaxPlayer, int depth)
@@ -40,6 +40,7 @@ static class ExpectiMiniMax
     public static int MaxValue(Node node, List<int> shifts, bool isMaxPlayer, int depth)
     {
         var value = int.MinValue;
+
         var moves = node.GetPossibleMoves(Player.COMPUTER, shifts);
         foreach (var move in moves)
         {
@@ -70,15 +71,34 @@ static class ExpectiMiniMax
     public static int ChanceValue(Node node, bool isMaxPlayer, int depth)
     {
         double avg = 0;
+        double noValidMovesNodesPossiblities = 0;
+        double noValidMovesNodesValue = 0;
+        bool noValidMovesChildCalculated = false;
         for (int i = 0; i < 7; i++)
         {
             var possibilty = Dice.GetTossPossibility(i);
             var shifts = Dice.GetShifts(i);
             var childNode = new Node(node, new PawnMovement(node.userPawns[0], 0));
             node.Children.Add(childNode);
-            var value = Value(childNode, shifts, !isMaxPlayer, depth - 1);
-            avg += possibilty * value;
+            
+            var ChildPossibleMovesCount = childNode.GetPossibleMoves(isMaxPlayer ? Player.COMPUTER : Player.USER, shifts).Count;
+            
+            if (ChildPossibleMovesCount > 0 || !noValidMovesChildCalculated)
+            {
+                var value = Value(childNode, shifts, !isMaxPlayer, depth - 1);
+                
+                if (ChildPossibleMovesCount > 0)
+                    avg += possibilty * value;
+                
+                if (!noValidMovesChildCalculated)
+                {
+                    noValidMovesNodesValue = value;
+                    noValidMovesChildCalculated = true;
+                }
+            }
+            if (ChildPossibleMovesCount is 0) noValidMovesNodesPossiblities += possibilty;
         }
+        avg += noValidMovesNodesPossiblities * noValidMovesNodesValue;
         return (int)avg;
     }
 }

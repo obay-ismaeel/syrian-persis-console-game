@@ -102,7 +102,7 @@ class Board
             var pawns = GetPlayerPawns(player);
             for (int i = 0;i < pawns.Count; i++)
             {
-                if (NextPosition(pawns[i], shift) != -1)
+                if (NextPosition(pawns[i], shift) is not -1)
                 {
                     moves.Add(new PawnMovement(pawns[i], shift));
                 }
