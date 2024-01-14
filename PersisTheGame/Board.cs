@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace PersisTheGame;
@@ -10,8 +11,7 @@ class Board
     
     private List<Cell> userPath = new();
     private List<Cell> computerPath = new();
-    
-    public readonly List<int> ProtectedCellsIndexes = new() { 9, 22, 26, 39, 43, 56, 60, 73 };
+    public readonly List<int> ProtectedCellsIndexes = new() { 10, 21, 27, 38, 44, 55, 61, 72 };
 
     public Board()
     {
@@ -242,11 +242,10 @@ class Board
     {
         var MaxInPawns = InPawns(Player.COMPUTER) * 10;
         var MinInPawns = InPawns(Player.USER) * -10;
-        var MaxProtectedPawns = ProtectedPawns(Player.COMPUTER) * 5;
-        var MinProtectedPawns = ProtectedPawns(Player.USER) * -5;
-        var MaxFinalKitchenPawns = FinalKitchenPawns(Player.COMPUTER) * 5;
-        var MinFinalKitchenPawns = FinalKitchenPawns(Player.USER) * -5;
-        
+        var MaxProtectedPawns = ProtectedPawns(Player.COMPUTER) * 4;
+        var MinProtectedPawns = ProtectedPawns(Player.USER) * -4;
+        var MaxFinalKitchenPawns = FinalKitchenPawns(Player.COMPUTER) * 6;
+        var MinFinalKitchenPawns = FinalKitchenPawns(Player.USER) * -6;
         return MaxInPawns + MinInPawns + MaxProtectedPawns
             + MinProtectedPawns + MaxFinalKitchenPawns + MinFinalKitchenPawns;
     }
@@ -257,12 +256,18 @@ class Board
         if(player is Player.USER)
         {
             for(int i = 76; i < 84; i++)
-                count += userPath[i].Count();
+            {
+                count += i is 83 ? userPath[i].Count() * 2 : userPath[i].Count();
+                if (i is 82) count -= userPath[i].Count();
+            }
         }
         else
         {
             for (int i = 76; i < 84; i++)
-                count += computerPath[i].Count();
+            {
+                count += i is 83 ? computerPath[i].Count() * 2 : computerPath[i].Count();
+                if (i is 82) count -= computerPath[i].Count();
+            }
         }
         return count;
     }
@@ -279,34 +284,41 @@ class Board
 
     public int InPawns(Player player) => 4 - OutPawns(player);
 
+    public Player GetWinner()
+    {
+        if (userPath[83].Count() is 4) return Player.USER;
+        if (computerPath[83].Count() is 4) return Player.COMPUTER;
+        return Player.NONE;
+    }
+
     public override string ToString()
     {
         StringBuilder sb = new();
         sb.Append($"\t\t\t|{userPath[74]}|{userPath[7]}|{userPath[8]}|\n");
-        sb.Append($"\t\t\t[{userPath[73]}]{userPath[6]}[{userPath[9]}]\n");
-        sb.Append($"\t\t\t|{userPath[72]}|{userPath[5]}|{userPath[10]}|\n");
+        sb.Append($"\t\t\t|{userPath[73]}|{userPath[6]}|{userPath[9]}|\n");
+        sb.Append($"\t\t\t[{userPath[72]}]{userPath[5]}[{userPath[10]}]\n");
         sb.Append($"\t\t\t|{userPath[71]}|{userPath[4]}|{userPath[11]}|\n");
         sb.Append($"\t\t\t|{userPath[70]}|{userPath[3]}|{userPath[12]}|\n");
         sb.Append($"\t\t\t|{userPath[69]}|{userPath[2]}|{userPath[13]}|\n");
         sb.Append($"\t\t\t|{userPath[68]}|{userPath[1]}|{userPath[14]}|\n");
         sb.Append($"\t\t\t|{userPath[67]}|{userPath[0]}|{userPath[15]}|\n");
-        
-        sb.Append($"|{userPath[59]}[{userPath[60]}]{userPath[61]}|{userPath[62]}|{userPath[63]}|{userPath[64]}|{userPath[65]}|{userPath[66]}|\t " +
-            $"|{userPath[16]}|{userPath[17]}|{userPath[18]}|{userPath[19]}|{userPath[20]}|{userPath[21]}[{userPath[22]}]{userPath[23]}|\n");
+
+        sb.Append($"|{userPath[59]}|{userPath[60]}[{userPath[61]}]{userPath[62]}|{userPath[63]}|{userPath[64]}|{userPath[65]}|{userPath[66]}|\t " +
+            $"|{userPath[16]}|{userPath[17]}|{userPath[18]}|{userPath[19]}|{userPath[20]}[{userPath[21]}]{userPath[22]}|{userPath[23]}|\n");
 
         sb.Append($"|{userPath[58]}|  |  |  |  |  |  |  |\t " +
             $"|  |  |  |  |  |  |  |{userPath[24]}|\n");
 
-        sb.Append($"|{userPath[57]}[{userPath[56]}]{userPath[55]}|{userPath[54]}|{userPath[53]}|{userPath[52]}|{userPath[51]}|{userPath[50]}|\t " +
-            $"|{userPath[32]}|{userPath[31]}|{userPath[30]}|{userPath[29]}|{userPath[28]}|{userPath[27]}[{userPath[26]}]{userPath[25]}|\n");
+        sb.Append($"|{userPath[57]}|{userPath[56]}[{userPath[55]}]{userPath[54]}|{userPath[53]}|{userPath[52]}|{userPath[51]}|{userPath[50]}|\t " +
+            $"|{userPath[32]}|{userPath[31]}|{userPath[30]}|{userPath[29]}|{userPath[28]}[{userPath[27]}]{userPath[26]}|{userPath[25]}|\n");
 
         sb.Append($"\t\t\t|{userPath[49]}|{computerPath[0]}|{userPath[33]}|\n");
         sb.Append($"\t\t\t|{userPath[48]}|{computerPath[1]}|{userPath[34]}|\n");
         sb.Append($"\t\t\t|{userPath[47]}|{computerPath[2]}|{userPath[35]}|\n");
         sb.Append($"\t\t\t|{userPath[46]}|{computerPath[3]}|{userPath[36]}|\n");
         sb.Append($"\t\t\t|{userPath[45]}|{computerPath[4]}|{userPath[37]}|\n");
-        sb.Append($"\t\t\t|{userPath[44]}|{computerPath[5]}|{userPath[38]}|\n");
-        sb.Append($"\t\t\t[{userPath[43]}]{computerPath[6]}[{userPath[39]}]");
+        sb.Append($"\t\t\t[{userPath[44]}]{computerPath[5]}[{userPath[38]}]\n");
+        sb.Append($"\t\t\t|{userPath[43]}|{computerPath[6]}|{userPath[39]}|");
         sb.Append($"\tOUT [USER:{OutPawns(Player.USER)} COM:{OutPawns(Player.COMPUTER)}]\n");
         sb.Append($"\t\t\t|{userPath[42]}|{userPath[41]}|{userPath[40]}|");
         sb.Append($"\tFINISHED [USER:{FinishedPawns(Player.USER)} COM:{FinishedPawns(Player.COMPUTER)}]\n");

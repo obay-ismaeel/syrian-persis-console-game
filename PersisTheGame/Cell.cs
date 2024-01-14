@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text;
 
 namespace PersisTheGame;
 
@@ -35,9 +36,6 @@ class Cell
             Content.Add(pawn);
             return;
         }
-        
-        //for(int i=0; i<Content.Count; i++)
-        //    Content[i].Position = -1;
 
         Content.ForEach(item => 
         {
@@ -60,12 +58,6 @@ class Cell
     public List<string> RemoveAll()
     {
         List<string> list = new();
-
-        //for(int i=0; i < Content.Count; i++)
-        //{
-        //    Content[i].Position = -1;
-        //    list.Add(Content[i].Name);
-        //}
 
         Content.ForEach(item =>
         {
@@ -90,6 +82,15 @@ class Cell
     public override string ToString()
     {
         if (!Content.Any()) return "  ";
-        return $"{Content[0]}";
+        var sb = new StringBuilder();
+        var count = 0;
+        foreach ( var item in Content)
+        {
+            if (count is not 0) sb.Append(",");
+            if(count is 0)sb.Append(item.ToString());
+            else sb.Append(item.ToString()[1]);
+            count++;
+        }
+        return sb.ToString();
     }
 }

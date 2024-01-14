@@ -9,13 +9,13 @@ class Game
 
     public void Play()
     {
-        while( ! board.IsTerminal() )
+        while (!board.IsTerminal())
         {
             showPlayerTurnAndCurrentBoard();
 
             var shifts = Dice.GetPlayerShifts(true);
-            
-            if( isUserTurn )
+
+            if (isUserTurn)
             {
                 UserTurnLogic(shifts);
             }
@@ -24,6 +24,21 @@ class Game
                 ComputerTurnLogic(shifts);
             }
         }
+        DeclareWinner();
+    }
+
+    private void DeclareWinner()
+    {
+        string winnerDeclaration;
+
+        if (board.GetWinner() is Player.USER)
+            winnerDeclaration = "CONGRATS YOU ARE THE WINNER!!";
+        else
+            winnerDeclaration = "OOPS the computer defeated you :)";
+
+        Console.WriteLine("================================");
+        Console.Write(winnerDeclaration);
+        Console.WriteLine("================================");
     }
 
     private void ComputerTurnLogic(List<int> shifts)
