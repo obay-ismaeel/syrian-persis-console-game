@@ -246,9 +246,36 @@ class Board
         var MinProtectedPawns = ProtectedPawns(Player.USER) * -4;
         var MaxFinalKitchenPawns = FinalKitchenPawns(Player.COMPUTER) * 6;
         var MinFinalKitchenPawns = FinalKitchenPawns(Player.USER) * -6;
+        var MaxInDangerPawns = InDangerPawns(Player.COMPUTER) * -1;
+        var MinInDangerPawns = InDangerPawns(Player.USER) * 1;
         return MaxInPawns + MinInPawns + MaxProtectedPawns
-            + MinProtectedPawns + MaxFinalKitchenPawns + MinFinalKitchenPawns;
+            + MinProtectedPawns + MaxFinalKitchenPawns + MinFinalKitchenPawns
+            + MaxInDangerPawns + MinInDangerPawns;
     }
+
+    public int InDangerPawns(Player player)
+    {
+        int count = 0;
+        var pawns = PlayerPawns(player);
+        foreach (var pawn in pawns)
+        {
+            if (EnemyPawnStepsBehind(2, player, pawn)) count++;
+            if (EnemyPawnStepsBehind(3, player, pawn)) count++;
+            if (EnemyPawnStepsBehind(4, player, pawn)) count++;
+        }
+        return count;
+    }
+
+    public bool EnemyPawnStepsBehind(int steps,  Player player, Pawn pawn)
+    {
+        if(pawn.Position - steps < 0) return false;
+        var path = player is Player.USER ? userPath : computerPath;
+        var enemy = OppositePlayer(player);
+        if (path[pawn.Position-steps].BelongsTo(enemy)) return true;
+        return false;
+    }
+
+    public Player OppositePlayer(Player player) => player is Player.USER ? Player.COMPUTER : Player.USER;
 
     public int FinalKitchenPawns(Player player)
     {
