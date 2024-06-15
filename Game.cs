@@ -1,4 +1,6 @@
 ﻿using System.Threading.Channels;
+using PersisTheGame.Enums;
+using PersisTheGame.Structure;
 
 namespace PersisTheGame;
 

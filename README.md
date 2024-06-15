@@ -1,1 +1,1 @@
-<h1>Syrian Persis Console Application</h1>
+<h1>Syrian Persis Board Game Console Application</h1>

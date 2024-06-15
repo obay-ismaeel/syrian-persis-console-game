@@ -1,4 +1,4 @@
-﻿namespace PersisTheGame;
+﻿namespace PersisTheGame.Enums;
 
 internal enum CellType
 {

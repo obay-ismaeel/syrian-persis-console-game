@@ -1,4 +1,4 @@
-﻿namespace PersisTheGame;
+﻿namespace PersisTheGame.Structure;
 
 static class Dice
 {

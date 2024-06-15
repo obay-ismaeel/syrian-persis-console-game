@@ -1,4 +1,7 @@
-﻿namespace PersisTheGame;
+﻿using PersisTheGame.Enums;
+using PersisTheGame.Structure;
+
+namespace PersisTheGame;
 
 internal class Node : Board
 {

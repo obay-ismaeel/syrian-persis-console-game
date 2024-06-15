@@ -1,7 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
+using PersisTheGame.Enums;
 
-namespace PersisTheGame;
+namespace PersisTheGame.Structure;
 
 class Cell
 {
@@ -11,10 +12,10 @@ class Cell
 
     public Cell()
     {
-        
+
     }
 
-    public Cell (Cell cell)
+    public Cell(Cell cell)
     {
         cell.Content.ForEach(pawn =>
         {
@@ -31,26 +32,26 @@ class Cell
 
     public void Place(Pawn pawn)
     {
-        if(this.BelongsTo(pawn.Player))
+        if (BelongsTo(pawn.Player))
         {
             Content.Add(pawn);
             return;
         }
 
-        Content.ForEach(item => 
+        Content.ForEach(item =>
         {
             item.Position = -1;
         });
 
         Content.Clear();
-        
+
         Content.Add(pawn);
     }
 
     public void Remove(Pawn pawn)
     {
         if (!Content.Contains(pawn)) return;
-        
+
         Content.Remove(pawn);
         pawn.Position = -1;
     }
@@ -71,23 +72,23 @@ class Cell
 
     public bool BelongsTo(Player player)
     {
-        if ( !Content.Any() ) return false;
+        if (!Content.Any()) return false;
         return Content.First().Player == player;
     }
 
     public int Count() => Content.Count;
 
-    public bool IsEmpty() => !Content.Any(); 
+    public bool IsEmpty() => !Content.Any();
 
     public override string ToString()
     {
         if (!Content.Any()) return "  ";
         var sb = new StringBuilder();
         var count = 0;
-        foreach ( var item in Content)
+        foreach (var item in Content)
         {
             if (count is not 0) sb.Append(",");
-            if(count is 0)sb.Append(item.ToString());
+            if (count is 0) sb.Append(item.ToString());
             else sb.Append(item.ToString()[1]);
             count++;
         }

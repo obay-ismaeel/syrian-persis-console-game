@@ -1,4 +1,4 @@
-﻿namespace PersisTheGame;
+﻿namespace PersisTheGame.Structure;
 
 class PawnMovement
 {
@@ -10,5 +10,5 @@ class PawnMovement
         Pawn = pawn;
         Shift = shift;
     }
-    
+
 }

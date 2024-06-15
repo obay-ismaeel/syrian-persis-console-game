@@ -1,14 +1,15 @@
 ﻿using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using PersisTheGame.Enums;
 
-namespace PersisTheGame;
+namespace PersisTheGame.Structure;
 
 class Board
 {
     public List<Pawn> userPawns = new();
     public List<Pawn> computerPawns = new();
-    
+
     private List<Cell> userPath = new();
     private List<Cell> computerPath = new();
     public readonly List<int> ProtectedCellsIndexes = new() { 10, 21, 27, 38, 44, 55, 61, 72 };
@@ -41,9 +42,9 @@ class Board
 
     }
 
-    public Board(Board board, PawnMovement move) : this( board )
+    public Board(Board board, PawnMovement move) : this(board)
     {
-        if(move.Shift is not 0) 
+        if (move.Shift is not 0)
             MovePawn(move.Pawn, move.Shift);
     }
 
@@ -97,10 +98,10 @@ class Board
     {
         List<PawnMovement> moves = new();
 
-        foreach(var shift in shifts)
+        foreach (var shift in shifts)
         {
             var pawns = GetPlayerPawns(player);
-            for (int i = 0;i < pawns.Count; i++)
+            for (int i = 0; i < pawns.Count; i++)
             {
                 if (NextPosition(pawns[i], shift) is not -1)
                 {
@@ -113,7 +114,7 @@ class Board
         .GroupBy(m => new { m.Pawn.Position, m.Shift })
         .Select(group => group.First())
         .OrderBy(m => m.Pawn.Name)
-        .ThenBy(m =>  m.Shift)
+        .ThenBy(m => m.Shift)
         .ToList();
 
         return uniqueMoves;
@@ -138,14 +139,14 @@ class Board
         var newPosition = NextPosition(pawn, shift);
 
         if (newPosition is -1) return;
-        
+
         var oldPosition = pawn.Position;
-        
+
         pawn.Position = newPosition;
-        
+
         if (pawn.Player is Player.USER)
         {
-            if(oldPosition is not -1) userPath[oldPosition].Remove(pawn);
+            if (oldPosition is not -1) userPath[oldPosition].Remove(pawn);
 
             if (userPath[newPosition].BelongsTo(Player.COMPUTER))
             {
@@ -197,7 +198,7 @@ class Board
         }
 
         var nextPosition = pawn.Position + shift;
-        
+
         if (nextPosition > 83) return -1;
 
         if (pawn.Player is Player.USER)
@@ -217,9 +218,9 @@ class Board
     public int OutPawns(Player player)
     {
         int count = 0;
-        foreach(var pawn in PlayerPawns(player))
+        foreach (var pawn in PlayerPawns(player))
         {
-            if(pawn.Position is -1) count++;
+            if (pawn.Position is -1) count++;
         }
         return count;
     }
@@ -266,12 +267,12 @@ class Board
         return count;
     }
 
-    public bool EnemyPawnStepsBehind(int steps,  Player player, Pawn pawn)
+    public bool EnemyPawnStepsBehind(int steps, Player player, Pawn pawn)
     {
-        if(pawn.Position - steps < 0) return false;
+        if (pawn.Position - steps < 0) return false;
         var path = player is Player.USER ? userPath : computerPath;
         var enemy = OppositePlayer(player);
-        if (path[pawn.Position-steps].BelongsTo(enemy)) return true;
+        if (path[pawn.Position - steps].BelongsTo(enemy)) return true;
         return false;
     }
 
@@ -280,9 +281,9 @@ class Board
     public int FinalKitchenPawns(Player player)
     {
         int count = 0;
-        if(player is Player.USER)
+        if (player is Player.USER)
         {
-            for(int i = 76; i < 84; i++)
+            for (int i = 76; i < 84; i++)
             {
                 count += i is 83 ? userPath[i].Count() * 2 : userPath[i].Count();
                 if (i is 82) count -= userPath[i].Count();
@@ -299,12 +300,12 @@ class Board
         return count;
     }
 
-    public int ProtectedPawns(Player player) 
+    public int ProtectedPawns(Player player)
     {
         int count = 0;
-        foreach(int index in ProtectedCellsIndexes)
+        foreach (int index in ProtectedCellsIndexes)
         {
-           if(userPath[index].BelongsTo(player)) count += userPath[index].Count();
+            if (userPath[index].BelongsTo(player)) count += userPath[index].Count();
         }
         return count;
     }

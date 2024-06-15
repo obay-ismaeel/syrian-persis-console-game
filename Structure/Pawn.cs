@@ -1,4 +1,6 @@
-﻿namespace PersisTheGame;
+﻿using PersisTheGame.Enums;
+
+namespace PersisTheGame.Structure;
 
 class Pawn
 {
@@ -8,8 +10,8 @@ class Pawn
 
     public Pawn(Player player, string name)
     {
-        this.Name = name;
-        this.Player = player;
+        Name = name;
+        Player = player;
     }
 
     public Pawn(Pawn pawn)
